@@ -6,6 +6,7 @@ authors = ["Ariel Parra <darkaico@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
+ipdb = "^0.13.2"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

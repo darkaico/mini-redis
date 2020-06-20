@@ -1,1 +1,4 @@
-from .mini_redis import MiniRedis
+from .mini_redis import (
+    CommandError,
+    MiniRedis
+)
