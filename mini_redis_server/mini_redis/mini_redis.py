@@ -1,11 +1,12 @@
-from . import utils
+from .utils import data_utils
+from .utils.singleton import SingletonMixin
 
 
 class CommandError(Exception):
     pass
 
 
-class MiniRedis:
+class MiniRedis(SingletonMixin):
 
     _kv_store = None
     _kv_ordered_store = None
@@ -46,7 +47,7 @@ class MiniRedis:
             self._kv_store[key] = 1
             return self.OK
 
-        if not utils.is_integer(value):
+        if not data_utils.is_integer(value):
             raise CommandError
 
         self._kv_store[key] = int(value) + 1

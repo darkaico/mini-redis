@@ -1,3 +1,7 @@
+"""Testing basic REDIS functionality
+
+This test suite test always using values as string - integers to simplify testing
+"""
 import pytest
 
 from mini_redis_server.mini_redis import (
