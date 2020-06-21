@@ -42,41 +42,71 @@ Simple utils to help about data parsing and singleton uses
 
 - [pytest](https://docs.pytest.org/en/stable/)
 
-## Ussage
+## Usage
+
+### Local Env
 
 Im using [Poetry](https://python-poetry.org/) as a dependency management. So once you set your environment
 to be python 3.8^ compatible you need to run
 
-- In case you dont have poetry installed
+#### In case you dont have poetry installed
 
 ```shell
 pip install poetry
 ```
 
-- Install dependencies
+#### Install dependencies
 
 ```shell
 poetry install
 ```
 
+### Docker
+
+In case you are using docker there is a Dockerfile that will build the project image and will start the server.
+
+#### Build the dockerfile
+
+```
+docker build .
+```
+
+#### Run the container
+
+```
+docker run <container id>
+```
+
 ### Commands
 
-In order to make ussage more simple I created a make file that have some useful commands
+In order simplify tasks I created a make file that have some useful commands
 
-- Run unit tests
+#### Run unit tests
 
 ```shell
 make test
 ```
 
-- Start HTTP server
+#### Start HTTP server
 
 ```shell
 make start
 ```
 
-- Seed some data
+#### Seed some data
 
 ```shell
 make seed
+```
+
+#### Build docker image
+
+```shell
+make docker_build
+```
+
+#### Start docker image
+
+```shell
+make docker_start
 ```
