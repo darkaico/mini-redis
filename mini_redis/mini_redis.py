@@ -1,3 +1,5 @@
+import threading
+
 from mini_redis.data_stores import SortedList
 from utils import data_utils
 from utils.singleton import SingletonMixin
@@ -9,6 +11,7 @@ class CommandError(Exception):
 
 class MiniRedis(SingletonMixin):
 
+    _store_lock = threading.Lock()
     _kv_store = None
     _kv_ordered_store = None
 
@@ -19,7 +22,8 @@ class MiniRedis(SingletonMixin):
         self._kv_ordered_store = {}
 
     def set(self, key: str, value: str, expiration: int = None):
-        self._kv_store[key] = value
+        with self._store_lock:
+            self._kv_store[key] = value
 
         return self.OK
 
@@ -31,9 +35,11 @@ class MiniRedis(SingletonMixin):
 
     def delete(self, key: str):
         if key in self._kv_store:
-            del self._kv_store[key]
+            with self._store_lock:
+                del self._kv_store[key]
         elif key in self._kv_ordered_store:
-            del self._kv_ordered_store[key]
+            with self._store_lock:
+                del self._kv_ordered_store[key]
         else:
             return None
 
@@ -43,15 +49,16 @@ class MiniRedis(SingletonMixin):
         return len(self._kv_store.keys()) + len(self._kv_ordered_store.keys())
 
     def incr(self, key: str):
-        value = self._kv_store.get(key)
-        if not value:
-            self._kv_store[key] = 1
-            return self.OK
+        with self._store_lock:
+            value = self._kv_store.get(key)
+            if not value:
+                self._kv_store[key] = 1
+                return self.OK
 
-        if not data_utils.is_integer(value):
-            raise CommandError
+            if not data_utils.is_integer(value):
+                raise CommandError
 
-        self._kv_store[key] = int(value) + 1
+            self._kv_store[key] = int(value) + 1
 
         return self.OK
 
@@ -60,12 +67,14 @@ class MiniRedis(SingletonMixin):
         if not data_utils.is_float(score):
             raise CommandError('value is not a valid float')
 
-        if key not in self._kv_ordered_store:
-            self._kv_ordered_store[key] = SortedList()
+        with self._store_lock:
+            if key not in self._kv_ordered_store:
+                self._kv_ordered_store[key] = SortedList()
 
-        sorted_list = self._kv_ordered_store[key]
+            sorted_list = self._kv_ordered_store[key]
+            result = sorted_list.zadd(float(score), member)
 
-        return sorted_list.zadd(float(score), member)
+        return result
 
     def zcard(self, key: str) -> int:
         sorted_list = self._kv_ordered_store.get(key)

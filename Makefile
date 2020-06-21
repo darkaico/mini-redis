@@ -5,19 +5,9 @@ start:
 	poetry run python mini_redis_server/server.py
 
 seed:
-	curl --location --request PUT 'http://0.0.0.0:8080/api/store/x1' \
-	--header 'Content-Type: text/plain' \
-	--data-raw 'Wolverine'
-
-
-	curl --location --request PUT 'http://0.0.0.0:8080/api/store/x2' \
-	--header 'Content-Type: text/plain' \
-	--data-raw 'Gambit'
-
-
-	curl --location --request PUT 'http://0.0.0.0:8080/api/store/x3' \
-	--header 'Content-Type: text/plain' \
-	--data-raw 'Quicksilver'
+	curl --location --request PUT 'http://0.0.0.0:8080/api/store/x1' --header 'Content-Type: application/json' --data-raw '{"value": "Wolverine"}'
+	curl --location --request PUT 'http://0.0.0.0:8080/api/store/x2' --header 'Content-Type: application/json' --data-raw '{"value": "Gambit"}'
+	curl --location --request PUT 'http://0.0.0.0:8080/api/store/x3' --header 'Content-Type: application/json' --data-raw '{"value": "Quicksilver"}'
 
 	curl --location --request PUT 'http://0.0.0.0:8080/api/store/mutants/zadd?score=1&member=Wolverine'
 	curl --location --request PUT 'http://0.0.0.0:8080/api/store/mutants/zadd?score=1&member=Guepardo'
