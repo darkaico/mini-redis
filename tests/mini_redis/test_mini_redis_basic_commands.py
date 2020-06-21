@@ -4,7 +4,7 @@ This test suite test always using values as string - integers to simplify testin
 """
 import pytest
 
-from mini_redis_server.mini_redis import (
+from mini_redis import (
     CommandError,
     MiniRedis
 )

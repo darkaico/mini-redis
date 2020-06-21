@@ -1,4 +1,4 @@
-from mini_redis_server.mini_redis.utils import data_utils
+from utils import data_utils
 
 
 def test_is_integer_valid():

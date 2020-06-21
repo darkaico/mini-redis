@@ -1,5 +1,5 @@
-from .utils import data_utils
-from .utils.singleton import SingletonMixin
+from utils import data_utils
+from utils.singleton import SingletonMixin
 
 
 class CommandError(Exception):

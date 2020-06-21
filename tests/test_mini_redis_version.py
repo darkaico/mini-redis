@@ -1,4 +1,4 @@
-from mini_redis_server import __version__
+from mini_redis import __version__
 
 
 def test_version():
