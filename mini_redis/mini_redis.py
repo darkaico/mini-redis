@@ -65,7 +65,7 @@ class MiniRedis(SingletonMixin):
 
         sorted_list = self._kv_ordered_store[key]
 
-        return sorted_list.zadd(score, member)
+        return sorted_list.zadd(float(score), member)
 
     def zcard(self, key: str) -> int:
         sorted_list = self._kv_ordered_store.get(key)
@@ -90,4 +90,4 @@ class MiniRedis(SingletonMixin):
         if not sorted_list:
             return []
 
-        return sorted_list.zrange(start, stop)
+        return sorted_list.zrange(int(start), int(stop))

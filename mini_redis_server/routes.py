@@ -49,11 +49,11 @@ async def put_incr(request):
     return web.Response(text=json.dumps(response))
 
 
-@routes.put(r'/api/store/{key}/zadd/{score:\d+}/{member}')
+@routes.put(r'/api/store/{key}/zadd')
 async def put_zadd(request):
     key = request.match_info['key']
-    score = request.match_info['score']
-    member = request.match_info['member']
+    score = request.query.get('score')
+    member = request.query.get('member')
 
     response = MiniRedis.instance().zadd(key, score, member)
 

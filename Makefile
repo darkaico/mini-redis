@@ -19,7 +19,7 @@ seed:
 	--header 'Content-Type: text/plain' \
 	--data-raw 'Quicksilver'
 
-	curl --location --request PUT 'http://0.0.0.0:8080/api/store/mutants/zadd/1/Wolverine'
-	curl --location --request PUT 'http://0.0.0.0:8080/api/store/mutants/zadd/1/Guepardo'
-	curl --location --request PUT 'http://0.0.0.0:8080/api/store/mutants/zadd/2/Gambit'
-	curl --location --request PUT 'http://0.0.0.0:8080/api/store/mutants/zadd/3/Quicksilver'
+	curl --location --request PUT 'http://0.0.0.0:8080/api/store/mutants/zadd?score=1&member=Wolverine'
+	curl --location --request PUT 'http://0.0.0.0:8080/api/store/mutants/zadd?score=1&member=Guepardo'
+	curl --location --request PUT 'http://0.0.0.0:8080/api/store/mutants/zadd?score=2&member=Gambit'
+	curl --location --request PUT 'http://0.0.0.0:8080/api/store/mutants/zadd?score=3&member=Quicksilver'
