@@ -76,9 +76,14 @@ def test_incr_basic(mini_redis):
     assert mini_redis.incr('mutants') == 'OK'
 
 
-def test_zadd_basic(mini_redis):
+def test_zadd_basic_integer(mini_redis):
 
     assert mini_redis.zadd('mutants', 0, 0) == 1
+
+
+def test_zadd_basic_float(mini_redis):
+
+    assert mini_redis.zadd('mutants', 1.8, 0) == 1
 
 
 def test_zcard_basic(mini_redis):
@@ -204,10 +209,41 @@ def test_zrange_with_all_values(mini_redis_with_ordered_mutants):
     ]
 
 
+def test_zadd_invalid_score(mini_redis):
+
+    with pytest.raises(CommandError):
+        mini_redis.zadd('mutants', 'x', 'Xavier')
+
+
+def test_zadd_existing(mini_redis):
+    mini_redis.zadd('mutants', 0, 0)
+
+    assert mini_redis.zadd('mutants', 0, 0) == 0
+
+
+def test_zadd_verify_float(mini_redis):
+    mini_redis.zadd('mutants', 1.2, 'Beast')
+    mini_redis.zadd('mutants', 1.0, 'Gambit')
+
+    assert mini_redis.zrange('mutants', 0, -1) == ['Gambit', 'Beast']
+
+
 def test_zadd_different_index(mini_redis):
     mini_redis.zadd('mutants', 7, 'Cyclop')
 
     assert mini_redis.zrange('mutants', 0, 0) == ['Cyclop']
+
+
+def test_zrange_invalid_start(mini_redis):
+
+    with pytest.raises(CommandError):
+        mini_redis.zrange('mutants', 'j', 0)
+
+
+def test_zrange_invalid_stop(mini_redis):
+
+    with pytest.raises(CommandError):
+        mini_redis.zrange('mutants', 1, 't')
 
 
 def test_zadd_with_elements(mini_redis_with_ordered_mutants):

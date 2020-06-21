@@ -1,9 +1,53 @@
+from dataclasses import (
+    dataclass,
+    field
+)
+
 from utils import data_utils
 from utils.singleton import SingletonMixin
 
 
 class CommandError(Exception):
     pass
+
+
+@dataclass
+class SortedList:
+
+    zsorts: list = field(default_factory=list)
+    zvalues: dict = field(default_factory=dict)
+    zreverse: dict = field(default_factory=dict)
+
+    def add(self, score, member):
+        self.zsorts.append(score)
+
+        self.zsorts = sorted(self.zsorts)
+
+        if score not in self.zvalues:
+            self.zvalues[score] = []
+
+        self.zvalues[score].append(member)
+        self.zreverse[member] = score
+
+    def zrange(self, start, stop):
+        stop_index = stop % self.zcard() + 1
+
+        return [zvalue for zkey in set(self.zsorts[start:stop_index]) for zvalue in self.zvalues[zkey]]
+
+    def exists(self, score, member):
+        zsort = self.zreverse.get(member)
+
+        return score == zsort
+
+    def zrank(self, member):
+        zsort = self.zreverse.get(member)
+        if not zsort:
+            return None
+
+        return self.zsorts.index(zsort)
+
+    def zcard(self):
+        return len(self.zsorts)
 
 
 class MiniRedis(SingletonMixin):
@@ -22,7 +66,7 @@ class MiniRedis(SingletonMixin):
 
         return self.OK
 
-    def get(self, key: str):
+    def get(self, key: str) -> str:
         if key in self._kv_ordered_store:
             raise CommandError
 
@@ -38,7 +82,7 @@ class MiniRedis(SingletonMixin):
 
         return self.OK
 
-    def dbsize(self):
+    def dbsize(self) -> int:
         return len(self._kv_store.keys()) + len(self._kv_ordered_store.keys())
 
     def incr(self, key: str):
@@ -54,37 +98,45 @@ class MiniRedis(SingletonMixin):
 
         return self.OK
 
-    def zadd(self, key: str, score, member):
+    def zadd(self, key: str, score: float, member: str) -> int:
+
+        if not data_utils.is_float(score):
+            raise CommandError('value is not a valid float')
+
         if key not in self._kv_ordered_store:
-            self._kv_ordered_store[key] = []
+            self._kv_ordered_store[key] = SortedList()
 
-        self._kv_ordered_store[key].insert(score, member)
+        sorted_list = self._kv_ordered_store[key]
 
-        # TODO: verify doc
+        if sorted_list.exists(score, member):
+            return 0
+
+        sorted_list.add(score, member)
+
+        # NOTE: Current implementation only support 1 key at the time
         return 1
 
-    def zcard(self, key: str):
-        zlist = self._kv_ordered_store.get(key, [])
+    def zcard(self, key: str) -> int:
+        sorted_list = self._kv_ordered_store.get(key)
+        if not sorted_list:
+            return 0
 
-        return len(zlist)
+        return sorted_list.zcard()
 
-    def zrank(self, key: str, member):
-        zlist = self._kv_ordered_store.get(key, [])
+    def zrank(self, key: str, member) -> int:
+        sorted_list = self._kv_ordered_store.get(key)
 
-        if member not in zlist:
+        if not sorted_list:
             return None
 
-        return zlist.index(member)
+        return sorted_list.zrank(member)
 
-    def zrange(self, key: str, start: int, stop: int):
-        zlist = self._kv_ordered_store.get(key)
-        if not zlist:
+    def zrange(self, key: str, start: int, stop: int) -> list:
+        if not data_utils.is_integer(start) or not data_utils.is_integer(stop):
+            raise CommandError('value is not an integer or out of range')
+
+        sorted_list = self._kv_ordered_store.get(key)
+        if not sorted_list:
             return []
 
-        zlen = len(zlist)
-
-        if start > zlen or (stop >= 0 and start > stop):
-            return []
-
-        stop_index = stop % zlen + 1
-        return zlist[start:stop_index]
+        return sorted_list.zrange(start, stop)

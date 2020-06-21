@@ -52,7 +52,7 @@ async def put_incr(request):
 @routes.put(r'/api/store/{key}/zadd/{score:\d+}/{member}')
 async def put_zadd(request):
     key = request.match_info['key']
-    score = int(request.match_info['score'])
+    score = request.match_info['score']
     member = request.match_info['member']
 
     response = MiniRedis.instance().zadd(key, score, member)
@@ -78,11 +78,12 @@ async def get_zrank(request):
     return web.Response(text=json.dumps(response))
 
 
-@routes.get(r'/api/store/{key}/zrange/{start:\d}/{stop:\d}')
+@routes.get(r'/api/store/{key}/zrange')
 async def get_zrange(request):
+
     key = request.match_info['key']
-    start = int(request.match_info['start'])
-    stop = int(request.match_info['stop'])
+    start = request.query.get('start')
+    stop = request.query.get('stop')
 
     response = MiniRedis.instance().zrange(key, start, stop)
 
