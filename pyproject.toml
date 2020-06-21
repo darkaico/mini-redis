@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "mini-redis-server"
+name = "mini-redis"
 version = "0.1.0"
 description = ""
 authors = ["Ariel Parra <darkaico@gmail.com>"]
