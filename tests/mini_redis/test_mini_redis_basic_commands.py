@@ -180,6 +180,14 @@ def test_zcard(mini_redis):
     assert mini_redis.zcard('mutants') == 2
 
 
+def test_zcard_same_score(mini_redis):
+    mini_redis.zadd('mutants', 1, 'uno')
+    mini_redis.zadd('mutants', 1, 'two')
+    mini_redis.zadd('mutants', 1, 'three')
+
+    assert mini_redis.zcard('mutants') == 3
+
+
 def test_zrank_with_cases(mini_redis):
     mini_redis.zadd('mutants', 1, 'uno')
     mini_redis.zadd('mutants', 2, 'two')
@@ -216,9 +224,9 @@ def test_zadd_invalid_score(mini_redis):
 
 
 def test_zadd_existing(mini_redis):
-    mini_redis.zadd('mutants', 0, 0)
+    mini_redis.zadd('mutants', 1, 'Gambit')
 
-    assert mini_redis.zadd('mutants', 0, 0) == 0
+    assert mini_redis.zadd('mutants', 1, 'Gambit') == 0
 
 
 def test_zadd_verify_float(mini_redis):

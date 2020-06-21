@@ -1,53 +1,10 @@
-from dataclasses import (
-    dataclass,
-    field
-)
-
+from mini_redis.data_stores import SortedList
 from utils import data_utils
 from utils.singleton import SingletonMixin
 
 
 class CommandError(Exception):
     pass
-
-
-@dataclass
-class SortedList:
-
-    zsorts: list = field(default_factory=list)
-    zvalues: dict = field(default_factory=dict)
-    zreverse: dict = field(default_factory=dict)
-
-    def add(self, score, member):
-        self.zsorts.append(score)
-
-        self.zsorts = sorted(self.zsorts)
-
-        if score not in self.zvalues:
-            self.zvalues[score] = []
-
-        self.zvalues[score].append(member)
-        self.zreverse[member] = score
-
-    def zrange(self, start, stop):
-        stop_index = stop % self.zcard() + 1
-
-        return [zvalue for zkey in set(self.zsorts[start:stop_index]) for zvalue in self.zvalues[zkey]]
-
-    def exists(self, score, member):
-        zsort = self.zreverse.get(member)
-
-        return score == zsort
-
-    def zrank(self, member):
-        zsort = self.zreverse.get(member)
-        if not zsort:
-            return None
-
-        return self.zsorts.index(zsort)
-
-    def zcard(self):
-        return len(self.zsorts)
 
 
 class MiniRedis(SingletonMixin):
@@ -108,13 +65,7 @@ class MiniRedis(SingletonMixin):
 
         sorted_list = self._kv_ordered_store[key]
 
-        if sorted_list.exists(score, member):
-            return 0
-
-        sorted_list.add(score, member)
-
-        # NOTE: Current implementation only support 1 key at the time
-        return 1
+        return sorted_list.zadd(score, member)
 
     def zcard(self, key: str) -> int:
         sorted_list = self._kv_ordered_store.get(key)
