@@ -1,5 +1,6 @@
 from aiohttp import web
-from simple_server.routes import routes
+
+from mini_redis_server.routes import routes
 
 
 class MiniRedisServer:
