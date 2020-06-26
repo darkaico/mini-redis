@@ -8,6 +8,7 @@ authors = ["Ariel Parra <darkaico@gmail.com>"]
 python = "^3.8"
 ipdb = "^0.13.2"
 flask = "^1.1.2"
+pytest-cov = "^2.10.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
