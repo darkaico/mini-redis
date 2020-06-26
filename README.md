@@ -1,7 +1,6 @@
 [![Build Status](https://travis-ci.org/darkaico/mini-redis.svg?branch=master)](https://travis-ci.org/darkaico/mini-redis)
 [![Coverage Status](https://coveralls.io/repos/github/darkaico/mini-redis/badge.svg?branch=master)](https://coveralls.io/github/darkaico/mini-redis?branch=master)
 
-
 # Mini-Redis Implementation
 
 Simple project of a mini REDIS implementation.
@@ -40,7 +39,7 @@ Simple utils to help about data parsing and singleton uses
 
 **Required Libraries**
 
-- [aiohttp](https://docs.aiohttp.org/en/stable/)
+- [flask](https://flask.palletsprojects.com/en/1.1.x/)
 
 **Development Libraries**
 
