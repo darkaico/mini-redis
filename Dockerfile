@@ -24,6 +24,6 @@ RUN poetry config virtualenvs.create false \
 # Creating folders, and files for a project:
 COPY ./ ./
 
-CMD ["poetry", "run", "python3", "-m", "mini_redis_server.server"]
+CMD ["poetry", "run", "python3", "-m", "api.app"]
 
 EXPOSE 8080

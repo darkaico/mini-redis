@@ -27,7 +27,9 @@ Set a value for a certain key
 **Content examples**
 
 ```json
-"OK"
+{
+  "message": "OK"
+}
 ```
 
 ## Get Key
@@ -53,7 +55,9 @@ Get the key value
 #### Key exists
 
 ```json
-"<key content>"
+{
+  "value": "<key content>"
+}
 ```
 
 #### Key does not exists
@@ -81,7 +85,9 @@ Delete a key
 #### Key exists
 
 ```json
-"OK"
+{
+  "message": "OK"
+}
 ```
 
 #### Key does not exists
@@ -113,7 +119,9 @@ Increments the number stored at key by one
 #### Key exists
 
 ```json
-"OK"
+{
+  "message": "OK"
+}
 ```
 
 #### Key does not exists
@@ -160,7 +168,9 @@ Adds all the specified members with the specified scores to the sorted set store
 #### Key exists
 
 ```json
-"OK"
+{
+  "message": "OK"
+}
 ```
 
 #### Key does not exists
@@ -198,7 +208,9 @@ Returns the sorted set cardinality (number of elements) of the sorted set stored
 #### Key exists
 
 ```json
-"integer"
+{
+  "value": "<key cardinality>"
+}
 ```
 
 #### Key does not exists
@@ -230,7 +242,9 @@ Returns the rank of member in the sorted set stored at key
 #### Key exists
 
 ```json
-"integer"
+{
+  "value": "<rank member>"
+}
 ```
 
 #### Key does not exists
@@ -264,7 +278,9 @@ Returns the specified range of elements in the sorted set stored at key
 #### Key exists
 
 ```json
-["Wolverine", "Guepardo"]
+{
+  "range": ["Wolverine", "Guepardo"]
+}
 ```
 
 #### Key does not exists

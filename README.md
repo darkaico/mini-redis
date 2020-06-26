@@ -20,9 +20,9 @@ MiniRedis.instance().set('x1', 'Wolverine')
 MiniRedis.instance().get('x1')
 ```
 
-### Mini Redis Server
+### Api
 
-Simple HTTP server using aiohttp library.
+Simple HTTP server using flask.
 
 [REST API](mini_redis_api.md)
 
