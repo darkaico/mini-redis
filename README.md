@@ -1,6 +1,6 @@
 # Mini-Redis Implementation
 
-Basic implementation of a mini REDIS implementation.
+Simple project of a mini REDIS implementation.
 
 ## Structure
 
