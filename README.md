@@ -7,11 +7,11 @@ Simple project of a mini REDIS implementation.
 
 ## Structure
 
-This project is divided in 2 main apps and an utils module
+This project is divided in 2 main apps and a utils module
 
 ### Mini Redis
 
-We will find here our mini redis library which could be used as a library directly by using its singleton instance
+We will find here our mini Redis library, which could be used directly through its singleton instance.
 
 ```python
 from mini_redis import MiniRedis
