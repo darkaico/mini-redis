@@ -9,7 +9,7 @@ def test_get_key_no_value(api_client):
     data = response.json
 
     assert response.status_code == 200
-    assert data['message']['value'] is None
+    assert data['value'] is None
 
 
 def test_get_key_value(api_client):
@@ -18,7 +18,7 @@ def test_get_key_value(api_client):
     data = response.json
 
     assert response.status_code == 200
-    assert data['message']['value'] == 'Wolverine'
+    assert data['value'] == 'Wolverine'
 
 
 def test_set_value(api_client):
@@ -74,3 +74,11 @@ def test_incr_wrong_value(api_client):
 
     assert response.status_code == 400
     assert data['error'] == 'value is not an integer or out of range'
+
+
+def test_zcard_no_value(api_client):
+    response = api_client.get('/api/store/humans/zcard')
+    data = response.json
+
+    assert response.status_code == 200
+    assert data['value'] == 0

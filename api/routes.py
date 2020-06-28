@@ -31,7 +31,7 @@ def get_key(key):
     except CommandError as e:
         return create_error_response(e)
 
-    return create_success_response({
+    return jsonify({
         'value': response
     })
 
