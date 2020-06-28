@@ -56,7 +56,7 @@ class MiniRedis(SingletonMixin):
                 return self.OK
 
             if not data_utils.is_integer(value):
-                raise CommandError
+                raise CommandError('value is not an integer or out of range')
 
             self._kv_store[key] = int(value) + 1
 

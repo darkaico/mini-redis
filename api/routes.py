@@ -12,10 +12,10 @@ from mini_redis import (
 api_routes = Blueprint('api', __name__)
 
 
-def create_error_response(msg):
-    return jsonify({
-        'error': msg
-    })
+def create_error_response(mini_redis_exception):
+    error_msg = '\n'.join(mini_redis_exception.args)
+
+    return jsonify({'error': error_msg}), 400
 
 
 def create_success_response(msg=''):
