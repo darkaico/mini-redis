@@ -45,10 +45,7 @@ def set_key(key):
 
     value = data.get('value')
 
-    try:
-        response = MiniRedis.instance().set(key, value)
-    except CommandError as e:
-        return create_error_response(e)
+    response = MiniRedis.instance().set(key, value)
 
     return create_success_response(response)
 
@@ -115,7 +112,6 @@ def get_zrank(key, member):
 
 @api_routes.route(r'/api/store/<key>/zrange', methods=['GET'])
 def get_zrange(key):
-
     start = request.args.get('start')
     stop = request.args.get('stop')
 

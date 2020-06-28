@@ -180,6 +180,13 @@ def test_zcard(mini_redis):
     assert mini_redis.zcard('mutants') == 2
 
 
+def test_zcard_wrong_store(mini_redis):
+    mini_redis.set('defenders', 'active')
+
+    with pytest.raises(CommandError):
+        mini_redis.zcard('defenders')
+
+
 def test_zcard_same_score(mini_redis):
     mini_redis.zadd('mutants', 1, 'uno')
     mini_redis.zadd('mutants', 1, 'two')

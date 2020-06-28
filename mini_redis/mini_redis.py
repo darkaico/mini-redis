@@ -29,7 +29,7 @@ class MiniRedis(SingletonMixin):
 
     def get(self, key: str) -> str:
         if key in self._kv_ordered_store:
-            raise CommandError
+            raise CommandError('Operation against a key holding the wrong kind of value')
 
         return self._kv_store.get(key)
 
@@ -77,6 +77,9 @@ class MiniRedis(SingletonMixin):
         return result
 
     def zcard(self, key: str) -> int:
+        if key in self._kv_store:
+            raise CommandError('Operation against a key holding the wrong kind of value')
+
         sorted_list = self._kv_ordered_store.get(key)
         if not sorted_list:
             return 0
