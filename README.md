@@ -5,6 +5,8 @@
 
 Simple project of a mini REDIS implementation.
 
+Main purpose is academic in order to understand Redis commands and how could be exposed through an API.
+
 ## Structure
 
 This project is divided in 2 main apps and a utils module

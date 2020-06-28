@@ -1,5 +1,7 @@
 """
-Note: following tests works as functionals because will call to MiniRedis implementation
+Note: following tests works as functional tests
+because will call to MiniRedis implementation and given its
+Singleton threaded inheritance works in conjunction to all the tests.
 """
 from mini_redis import MiniRedis
 
@@ -82,3 +84,44 @@ def test_zcard_no_value(api_client):
 
     assert response.status_code == 200
     assert data['value'] == 0
+
+
+def test_zcard_no_value(api_client):
+    response = api_client.get('/api/store/humans/zcard')
+    data = response.json
+
+    assert response.status_code == 200
+    assert data['value'] == 0
+
+
+def test_zcard_existing_value(api_client):
+
+    MiniRedis.instance().zadd('aliens', 1, 'outlander_one')
+    MiniRedis.instance().zadd('aliens', 2, 'outlander_two')
+
+    response = api_client.get('/api/store/aliens/zcard')
+    data = response.json
+
+    assert response.status_code == 200
+    assert data['value'] == 2
+
+
+def test_zrank_no_value(api_client):
+    response = api_client.get('/api/store/jedis/zrank/0')
+    data = response.json
+
+    assert response.status_code == 200
+    assert data['value'] == None
+
+
+def test_zcard_existing_value(api_client):
+
+    MiniRedis.instance().zadd('jedis', 1, 'obi')
+    MiniRedis.instance().zadd('jedis', 1, 'leia')
+    MiniRedis.instance().zadd('jedis', 2, 'anakin')
+
+    response = api_client.get('/api/store/jedis/zrank/anakin')
+    data = response.json
+
+    assert response.status_code == 200
+    assert data['value'] == 2
